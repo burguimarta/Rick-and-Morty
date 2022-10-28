@@ -1,10 +1,29 @@
+import React, { useState, useEffect } from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import Filters from "./components/Filters/Filters";
+import Cards from "./components/Cards/Cards";
 
 
 
 function App() {
+  let [pageNumber, setPageNumber] = useState(5);
+  let [fetchedData, updateFetchedData] = useState([]);
+  let { info, results } = fetchedData;
+
+  console.log(results);
+  let api = `https://rickandmortyapi.com/api/character/?page=${pageNumber}`;
+
+  useEffect(()=>{
+
+  //  IIFE (Inmediately Invoked Function Expression) es una función de JS que funciona cuando está definida:
+  (async function (){ 
+    let data = await fetch(api).then((response)=>response.json());
+    updateFetchedData(data);
+   })();
+
+  },[api]);
+
   return (
     <div className="App">
       <h1 className="text-center ubuntu my-4">
@@ -17,7 +36,13 @@ function App() {
           <div className="col-3">
             <Filters />
           </div>
-          <div className="col-8"></div>
+          <div className="col-8">
+            <div className="row">
+              <Cards />
+              <Cards />
+              <Cards />
+            </div>
+          </div>
         </div>
       </div>
     </div>
